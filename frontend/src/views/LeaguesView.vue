@@ -7,14 +7,22 @@ import { Competition } from '../types/football-data';
 const footballDataStore = useFootballDataStore();
 const filteredLeagues = ref<Competition[]>([]);
 
+const errorMessage = ref('');
+
 onMounted(async () => {
-  await footballDataStore.fetchTop5Leagues();
+  const res = await footballDataStore.fetchTop5Leagues();
+  if (res === 429) {
+    errorMessage.value = 'API rate limit exceeded. Please try again later.';
+  }
   filteredLeagues.value = footballDataStore.getTop5Leagues;
 });
 </script>
 
 <template>
   <main>
+    <div class="container mt-5">
+      <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+    </div>
     <LeagueList :leaguesData="filteredLeagues" />
   </main>
 </template>

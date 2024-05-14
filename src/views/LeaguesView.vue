@@ -1,26 +1,20 @@
 <script setup lang="ts">
-import LeaguesList from '../components/LeaguesList.vue'
-import { onMounted } from 'vue';
-import { computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useFootballDataStore } from '../stores/football-data';
+import LeagueList from '../components/LeagueList.vue';
+import { Competition } from '../types/football-data';
 
-const top5LeaguesIds = [2002, 2014, 2015, 2019, 2021];
 const footballDataStore = useFootballDataStore();
-const { leagues } = footballDataStore;
+const filteredLeagues = ref<Competition[]>([]);
 
-const filteredLeagues = computed(() => {
-  return leagues.filter((league) => top5LeaguesIds.includes(league.id));
-});
-
-console.log(filteredLeagues);
-
-onMounted(() => {
-  footballDataStore.fetchTierOneLeagues();
+onMounted(async () => {
+  await footballDataStore.fetchTop5Leagues();
+  filteredLeagues.value = footballDataStore.getTop5Leagues;
 });
 </script>
 
 <template>
   <main>
-    <LeaguesList :leaguesData="filteredLeagues" />
+    <LeagueList :leaguesData="filteredLeagues" />
   </main>
 </template>

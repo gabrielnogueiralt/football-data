@@ -1,25 +1,31 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import LeaguesView from '../views/LeaguesView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import LeaguesView from '../views/LeaguesView.vue';
+import TeamsView from '../views/TeamsView.vue';
+import TeamPlayersView from '../views/TeamPlayersView.vue';
+
+const routes = [
+  {
+    path: '/',
+    name: 'leagues',
+    component: LeaguesView,
+  },
+  {
+    path: '/league/:id',
+    name: 'teams',
+    component: TeamsView,
+    props: true,
+  },
+  {
+    path: '/team/:id',
+    name: 'team-players',
+    component: TeamPlayersView,
+    props: true,
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'leagues',
-      component: LeaguesView
-    },
-    {
-      path: '/teams',
-      name: 'teams',
-      component: () => import('../views/TeamsView.vue')
-    },
-    {
-      path: '/team-players',
-      name: 'players',
-      component: () => import('../views/TeamPlayersView.vue')
-    }
-  ]
-})
+  routes,
+});
 
-export default router
+export default router;

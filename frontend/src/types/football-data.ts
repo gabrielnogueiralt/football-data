@@ -40,6 +40,19 @@ export interface Competition {
     lastUpdated: string;
 }
 
+export interface Standing {
+    position: number;
+    team: Team;
+    playedGames: number;
+    won: number;
+    draw: number;
+    lost: number;
+    points: number;
+    goalsFor: number;
+    goalsAgainst: number;
+    goalDifference: number;
+}
+
 export interface LeagueDetails {
     season: {
         id: number;
@@ -49,20 +62,7 @@ export interface LeagueDetails {
     };
     standings: [
         {
-            table: [
-                {
-                    position: number;
-                    team: Team;
-                    playedGames: number;
-                    won: number;
-                    draw: number;
-                    lost: number;
-                    points: number;
-                    goalsFor: number;
-                    goalsAgainst: number;
-                    goalDifference: number;
-                }
-            ];
+            table: Standing[];
         }
     ];
 }

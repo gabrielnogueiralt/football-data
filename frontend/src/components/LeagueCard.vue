@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import { useRouter } from 'vue-router';
-import { Competition } from '../types/football-data';
+import type { Competition } from '../types/football-data';
 
 const props = defineProps<{ league: Competition }>();
 const router = useRouter();

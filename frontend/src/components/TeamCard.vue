@@ -29,11 +29,13 @@ const toggleFavorite = async (teamId: number) => {
     <img :src="props.team.crest" class="card-img-top" :alt="props.team.name">
     <div class="card-body text-center">
       <h5 class="card-title mb-2">{{ props.team.name }}</h5>
-      <p class="card-text text-muted">
+      <span v-if="props.team.venue" class="card-text text-muted">
         <strong>Venue:</strong> {{ props.team.venue }}<br>
+      </span>
+      <span v-if="props.team.founded" class="card-text text-muted">
         <strong>Founded:</strong> {{ props.team.founded }}
-      </p>
-      <div class="d-flex justify-content-center">
+      </span>
+      <div class="d-flex justify-content-center mt-2">
         <button @click.stop="toggleFavorite(props.team.id)" class="btn btn-sm"
           :class="isFavorite ? 'btn-danger' : 'btn-outline-primary'">
           {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}

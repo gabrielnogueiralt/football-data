@@ -14,9 +14,6 @@ export default {
   getTierOneLeagues() {
     return instance.get('/competitions?plan=TIER_ONE&areas=2077');
   },
-  getLeagueDetails(id: number) {
-    return instance.get(`/competitions/${id}/standings`);
-  },
   getLeagueTeams(id: number) {
     return instance.get(`/competitions/${id}/teams`);
   },

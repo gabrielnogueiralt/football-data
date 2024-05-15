@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
-import { Player } from '../types/football-data';
+import type { Player } from '../types/football-data';
 
 const props = defineProps<{ player: Player }>();
 

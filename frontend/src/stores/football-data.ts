@@ -10,7 +10,9 @@ export const useFootballDataStore = defineStore('footballData', {
     leagueDetails: {} as LeagueDetails | null,
     teamDetails: {} as TeamDetails | null,
     favorites: [] as number[],
-    userId: null as number | null,
+    userId: null as string | null,
+    currentPage: 1,
+    itemsPerPage: 6,
   }),
   getters: {
     getTop5Leagues: (state) => state.top5Leagues,
@@ -18,6 +20,22 @@ export const useFootballDataStore = defineStore('footballData', {
     getTeamDetails: (state) => state.teamDetails,
     getFavorites: (state) => state.favorites,
     isAuthenticated: (state) => !!state.userId,
+    paginatedPlayers: (state) => {
+      if (!state.teamDetails) return [];
+      const start = (state.currentPage - 1) * state.itemsPerPage;
+      const end = start + state.itemsPerPage;
+      return state.teamDetails.squad.slice(start, end);
+    },
+    totalPages: (state) => {
+      if (!state.teamDetails) return 0;
+      return Math.ceil(state.teamDetails.squad.length / state.itemsPerPage);
+    },
+    prevPage() {
+      if (this.currentPage > 1) this.currentPage--;
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) this.currentPage++;
+    }
   },
   actions: {
     async fetchTop5Leagues() {
@@ -27,7 +45,7 @@ export const useFootballDataStore = defineStore('footballData', {
         this.top5Leagues = response.data.competitions.filter((competition: Competition) =>
           competition.code && top5LeagueCodes.includes(competition.code)
         );
-      } catch (error) {
+      } catch (error: any) {
         // HTTP 429: Too Many Requests
         if (error.response.status === 429) {
           console.error('Too many requests. Please try again later.', error);
@@ -102,7 +120,6 @@ export const useFootballDataStore = defineStore('footballData', {
       if (!this.userId) return;
       try {
         const response = await FavoritesService.loadFavorites(this.userId);
-        console.log('response', response);
         this.favorites = response;
       } catch (error) {
         console.error('Failed to load favorites:', error);
@@ -111,7 +128,7 @@ export const useFootballDataStore = defineStore('footballData', {
     checkAuth() {
       const userId = AuthService.getUserId();
       if (userId) {
-        this.userId = Number(userId);
+        this.userId = userId;
         this.loadFavorites();
         return true;
       } else {
